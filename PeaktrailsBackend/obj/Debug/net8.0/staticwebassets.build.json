@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "VjFe2UVrhYi1BEkOq3iZ8Bmys7/aij++9zSnGEeFR34=",
+  "Source": "PeaktrailsBackend",
+  "BasePath": "_content/PeaktrailsBackend",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
