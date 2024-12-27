@@ -42,16 +42,16 @@ namespace PeaktrailsBackend.Controllers
         }
 
 
-        [HttpPost("upload-gpx")]
+        [HttpPost("upload-trail")]
         public async Task<IActionResult> UploadGpxFile(
-        IFormFile gpxFile,
-        [FromForm] string distance,
-        [FromForm] string ascent,
-        [FromForm] string descent,
-        [FromForm] string name,
-        [FromForm] string difficulty,
-        [FromForm] string description,
-        [FromForm] string location)
+    [FromForm] IFormFile gpxFile,
+    [FromForm] string name,
+    [FromForm] string distance,
+    [FromForm] string ascent,
+    [FromForm] string descent,
+    [FromForm] string difficulty,
+    [FromForm] string description,
+    [FromForm] string location)
         {
             if (gpxFile == null || gpxFile.Length == 0)
                 return BadRequest("GPX file is required.");
@@ -71,11 +71,11 @@ namespace PeaktrailsBackend.Controllers
             }
 
             // Parse and validate distance, ascent, and descent
-            if (!decimal.TryParse(distance, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var parsedDistance))
+            if (!decimal.TryParse(distance, out var parsedDistance))
                 return BadRequest("Invalid distance provided.");
-            if (!decimal.TryParse(ascent, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var parsedAscent))
+            if (!decimal.TryParse(ascent, out var parsedAscent))
                 return BadRequest("Invalid ascent provided.");
-            if (!decimal.TryParse(descent, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var parsedDescent))
+            if (!decimal.TryParse(descent, out var parsedDescent))
                 return BadRequest("Invalid descent provided.");
 
             // Create a new Trail entity and save it to the database
@@ -97,9 +97,11 @@ namespace PeaktrailsBackend.Controllers
             // Save the new trail in the database
             await _trailsRepository.AddTrailAsync(route);
 
-            // Return a success message and the TrailId in the response
             return Ok(new { message = "Route saved successfully", route.TrailId });
         }
+
+
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTrail(int id)

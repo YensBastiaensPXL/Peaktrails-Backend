@@ -30,6 +30,7 @@ builder.Services.AddScoped<TrailsRepository>();
 
 
 
+
 // Set upload size limit to 50MB
 builder.Services.Configure<FormOptions>(options =>
 {

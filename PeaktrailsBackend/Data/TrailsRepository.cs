@@ -57,7 +57,7 @@ namespace PeaktrailsBackend.Data
                 // Verwijder de trail zelf
                 _context.Trails.Remove(trail);
 
-                await _context.SaveChangesAsync();  // Sla alle wijzigingen op
+                await _context.SaveChangesAsync();
             }
         }
 
