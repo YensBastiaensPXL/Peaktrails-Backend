@@ -38,6 +38,13 @@ namespace PeaktrailsApp.Data
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateUserAsync(User user)
+        {
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+
         public async Task<IEnumerable<Trail>> GetFavoriteTrailsByUserIdAsync(int userId)
         {
             return await _context.FavoriteTrails

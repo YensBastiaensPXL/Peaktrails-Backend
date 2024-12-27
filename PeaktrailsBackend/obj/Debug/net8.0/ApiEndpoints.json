@@ -284,6 +284,27 @@
   },
   {
     "ContainingType": "PeaktrailsApp.Controllers.UsersController",
+    "Method": "UpdateUser",
+    "RelativePath": "api/Users/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "userDto",
+        "Type": "PeaktrailsApp.Data.Models.UserDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PeaktrailsApp.Controllers.UsersController",
     "Method": "AddFavoriteTrail",
     "RelativePath": "api/Users/{userId}/addfavorites/{trailId}",
     "HttpMethod": "POST",

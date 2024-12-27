@@ -303,6 +303,46 @@
             "description": "Success"
           }
         }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
       }
     },
     "/api/Users/login": {
@@ -415,6 +455,7 @@
       },
       "UserDto": {
         "required": [
+          "confirmPassword",
           "email",
           "passwordHash",
           "userName"
@@ -431,6 +472,10 @@
             "format": "email"
           },
           "passwordHash": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "confirmPassword": {
             "minLength": 1,
             "type": "string"
           }

@@ -13,5 +13,9 @@ namespace PeaktrailsApp.Data.Models
 
         [Required]
         public string PasswordHash { get; set; }
+
+        [Required]
+        [Compare("PasswordHash", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }  // Bevestig wachtwoord
     }
 }

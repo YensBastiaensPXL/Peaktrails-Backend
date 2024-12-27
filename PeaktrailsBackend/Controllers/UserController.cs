@@ -67,6 +67,44 @@ namespace PeaktrailsApp.Controllers
 
             return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, user);
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDto userDto)
+        {
+            // Haal de gebruiker op uit de database
+            var user = await _repository.GetUserByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound($"User with id {id} not found.");
+            }
+
+            // Controleer of het model geldig is
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); // Retourneer validatiefouten
+            }
+
+            // Check of het wachtwoord en confirm password overeenkomen
+            if (userDto.PasswordHash != userDto.ConfirmPassword)
+            {
+                return BadRequest("Password and confirmation password do not match.");
+            }
+
+            // Werk de andere gegevens bij
+            user.UserName = userDto.UserName;
+            user.Email = userDto.Email;
+
+            // Wachtwoord bijwerken (wachtwoord moet worden gehashed)
+            user.PasswordHash = PasswordHasher.HashPassword(userDto.PasswordHash);
+
+            // Sla de wijzigingen op in de database
+            await _repository.UpdateUserAsync(user);
+
+            return Ok(new { message = "User updated successfully", user.UserId });
+        }
+
+
         // Inloggen gebruiker
 
         [HttpPost("login")]
