@@ -114,6 +114,63 @@
           }
         }
       },
+      "put": {
+        "tags": [
+          "Trails"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "gpxFile": {
+                    "type": "string",
+                    "format": "binary"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "distance": {
+                    "type": "string"
+                  },
+                  "ascent": {
+                    "type": "string"
+                  },
+                  "descent": {
+                    "type": "string"
+                  },
+                  "difficulty": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "location": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
       "delete": {
         "tags": [
           "Trails"
@@ -136,7 +193,7 @@
         }
       }
     },
-    "/api/Trails/upload-gpx": {
+    "/api/Trails/upload-trail": {
       "post": {
         "tags": [
           "Trails"

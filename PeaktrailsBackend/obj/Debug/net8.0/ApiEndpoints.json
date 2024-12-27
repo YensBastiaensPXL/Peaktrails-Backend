@@ -69,6 +69,87 @@
   },
   {
     "ContainingType": "PeaktrailsBackend.Controllers.TrailsController",
+    "Method": "UpdateTrail",
+    "RelativePath": "api/Trails/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "ContentType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContentDisposition",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Headers",
+        "Type": "Microsoft.AspNetCore.Http.IHeaderDictionary",
+        "IsRequired": false
+      },
+      {
+        "Name": "Length",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "distance",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ascent",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "descent",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "difficulty",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "location",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PeaktrailsBackend.Controllers.TrailsController",
     "Method": "DeleteTrail",
     "RelativePath": "api/Trails/{id}",
     "HttpMethod": "DELETE",
@@ -86,7 +167,7 @@
   {
     "ContainingType": "PeaktrailsBackend.Controllers.TrailsController",
     "Method": "UploadGpxFile",
-    "RelativePath": "api/Trails/upload-gpx",
+    "RelativePath": "api/Trails/upload-trail",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,

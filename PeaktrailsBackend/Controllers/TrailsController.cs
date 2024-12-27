@@ -100,6 +100,70 @@ namespace PeaktrailsBackend.Controllers
             return Ok(new { message = "Route saved successfully", route.TrailId });
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTrail(
+    int id,
+    [FromForm] IFormFile gpxFile,  // Nieuw bestand toevoegen
+    [FromForm] string name,
+    [FromForm] string distance,
+    [FromForm] string ascent,
+    [FromForm] string descent,
+    [FromForm] string difficulty,
+    [FromForm] string description,
+    [FromForm] string location)
+        {
+            var trail = await _trailsRepository.GetTrailByIdAsync(id);
+
+            if (trail == null)
+            {
+                return NotFound($"Trail with id {id} not found.");
+            }
+
+            // Parse and validate distance, ascent, and descent
+            if (!decimal.TryParse(distance, out var parsedDistance))
+                return BadRequest("Invalid distance provided.");
+            if (!decimal.TryParse(ascent, out var parsedAscent))
+                return BadRequest("Invalid ascent provided.");
+            if (!decimal.TryParse(descent, out var parsedDescent))
+                return BadRequest("Invalid descent provided.");
+
+            // Update trail properties
+            trail.Name = name;
+            trail.Length = parsedDistance;
+            trail.Elevation = parsedAscent;
+            trail.TotalAscent = parsedAscent;
+            trail.TotalDescent = parsedDescent;
+            trail.Difficulty = difficulty;
+            trail.Description = description;
+            trail.Location = location;
+
+            // If a new GPX file is provided, process it
+            if (gpxFile != null && gpxFile.Length > 0)
+            {
+                // Save the GPX file to a temporary location
+                var filePath = Path.Combine(Path.GetTempPath(), gpxFile.FileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await gpxFile.CopyToAsync(stream);
+                }
+
+                // Read the GPX content from the saved file
+                string gpxContent;
+                using (var reader = new StreamReader(filePath))
+                {
+                    gpxContent = await reader.ReadToEndAsync();
+                }
+
+                // Update GPX fields in the trail
+                trail.GPXLocation = filePath;
+                trail.GPXContent = gpxContent;
+            }
+
+            // Update the trail in the database
+            await _trailsRepository.UpdateTrailAsync(trail);
+
+            return Ok(new { message = "Trail updated successfully", trail.TrailId });
+        }
 
 
 
