@@ -44,14 +44,14 @@ namespace PeaktrailsBackend.Controllers
 
         [HttpPost("upload-gpx")]
         public async Task<IActionResult> UploadGpxFile(
-    IFormFile gpxFile,
-    [FromForm] string distance,
-    [FromForm] string ascent,
-    [FromForm] string descent,
-    [FromForm] string name,
-    [FromForm] string difficulty,
-    [FromForm] string description,
-    [FromForm] string location)
+        IFormFile gpxFile,
+        [FromForm] string distance,
+        [FromForm] string ascent,
+        [FromForm] string descent,
+        [FromForm] string name,
+        [FromForm] string difficulty,
+        [FromForm] string description,
+        [FromForm] string location)
         {
             if (gpxFile == null || gpxFile.Length == 0)
                 return BadRequest("GPX file is required.");
@@ -101,66 +101,27 @@ namespace PeaktrailsBackend.Controllers
             return Ok(new { message = "Route saved successfully", route.TrailId });
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTrail(int id)
+        {
+            try
+            {
+                var trail = await _trailsRepository.GetTrailByIdAsync(id);
+                if (trail == null)
+                {
+                    return NotFound($"Trail with id {id} not found.");
+                }
 
 
+                await _trailsRepository.DeleteTrailAsync(id);
 
+                return Ok(new { message = "Trail successfully deleted." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error deleting trail: {ex.Message}");
+            }
+        }
 
-
-
-
-        //// POST: api/Routes
-        //[HttpPost]
-        //public async Task<IActionResult> CreateRoute([FromBody] Route newRoute)
-        //{
-        //    _context.Routes.Add(newRoute);
-        //    await _context.SaveChangesAsync();
-        //    return CreatedAtAction(nameof(GetRoute), new { id = newRoute.RouteId }, newRoute);
-        //}
-
-        //// PUT: api/Routes/5
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateRoute(int id, [FromBody] Route updatedRoute)
-        //{
-        //    if (id != updatedRoute.RouteId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(updatedRoute).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!_context.Routes.Any(e => e.RouteId == id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-        //// DELETE: api/Routes/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteRoute(int id)
-        //{
-        //    var route = await _context.Routes.FindAsync(id);
-        //    if (route == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Routes.Remove(route);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
     }
 }

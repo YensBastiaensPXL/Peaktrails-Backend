@@ -33,14 +33,36 @@ namespace PeaktrailsBackend.Data
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteTrailAsync(int id) // Wijziging hier
+        public async Task DeleteTrailAsync(int id)
         {
-            var trail = await _context.Trails.FindAsync(id); // Wijziging hier
+            var trail = await _context.Trails
+                                      .Include(t => t.Photos)  // Includeer foto's
+                                      .Include(t => t.FavoriteTrails)  // Includeer favoriete trails
+                                      .FirstOrDefaultAsync(t => t.TrailId == id);
+
             if (trail != null)
             {
-                _context.Trails.Remove(trail); // Wijziging hier
-                await _context.SaveChangesAsync();
+                // Verwijder alle foto's die aan de trail zijn gekoppeld
+                if (trail.Photos != null)
+                {
+                    _context.TrailPhotos.RemoveRange(trail.Photos);  // Verwijder alle foto's van de trail
+                }
+
+                // Verwijder de favoriete trails die aan deze trail zijn gekoppeld
+                if (trail.FavoriteTrails != null)
+                {
+                    _context.FavoriteTrails.RemoveRange(trail.FavoriteTrails);  // Verwijder de favoriete trails
+                }
+
+                // Verwijder de trail zelf
+                _context.Trails.Remove(trail);
+
+                await _context.SaveChangesAsync();  // Sla alle wijzigingen op
             }
         }
+
+
+
+
     }
 }

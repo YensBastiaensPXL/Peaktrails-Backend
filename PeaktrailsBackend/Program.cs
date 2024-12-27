@@ -26,6 +26,9 @@ builder.Services.AddDbContext<PeaktrailsAppContext>(options =>
 // Add repository
 builder.Services.AddScoped<PhotosRepository>();
 builder.Services.AddScoped<UsersRepository>();
+builder.Services.AddScoped<TrailsRepository>();
+
+
 
 // Set upload size limit to 50MB
 builder.Services.Configure<FormOptions>(options =>
