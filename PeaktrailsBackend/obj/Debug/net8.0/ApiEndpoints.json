@@ -166,6 +166,43 @@
   },
   {
     "ContainingType": "PeaktrailsBackend.Controllers.TrailsController",
+    "Method": "GetReviewsByTrail",
+    "RelativePath": "api/Trails/{trailId}/reviews",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trailId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PeaktrailsBackend.Controllers.TrailsController",
+    "Method": "AddReview",
+    "RelativePath": "api/Trails/{trailId}/reviews",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trailId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "reviewDto",
+        "Type": "PeaktrailsBackend.Data.Entities.ReviewDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PeaktrailsBackend.Controllers.TrailsController",
     "Method": "UploadGpxFile",
     "RelativePath": "api/Trails/upload-trail",
     "HttpMethod": "POST",
@@ -235,6 +272,11 @@
       {
         "Name": "location",
         "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "photoFiles",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
         "IsRequired": false
       }
     ],

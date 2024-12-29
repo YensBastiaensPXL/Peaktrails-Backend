@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PeaktrailsBackend.Data.Entities;
 
 namespace PeaktrailsBackend.Data
 {
@@ -59,6 +60,21 @@ namespace PeaktrailsBackend.Data
 
                 await _context.SaveChangesAsync();
             }
+        }
+        // Haal alle reviews voor een specifieke trail op
+        public async Task<IEnumerable<Review>> GetReviewsByTrailIdAsync(int trailId)
+        {
+            return await _context.Reviews
+                .Where(r => r.TrailId == trailId)
+                .Include(r => r.User) // Includeer de gebruiker die de review heeft gepost
+                .ToListAsync();
+        }
+
+        // Voeg een review toe
+        public async Task AddReviewAsync(Review review)
+        {
+            await _context.Reviews.AddAsync(review);
+            await _context.SaveChangesAsync();
         }
 
 

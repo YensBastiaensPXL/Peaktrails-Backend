@@ -1,5 +1,6 @@
 ﻿using PeaktrailsApp.Data.Entities;
 using PeaktrailsBackend.Data.Entities;
+using System.Text.Json.Serialization;
 
 public class Trail
 {
@@ -19,6 +20,8 @@ public class Trail
     // Navigatie-eigenschap naar de foto's (one-to-many relatie)
 
     public List<Photo> Photos { get; set; } = new List<Photo>();
+    [JsonIgnore] // Voorkom dat Reviews worden meegegeven in de JSON
+    public List<Review> Reviews { get; set; } = new List<Review>();
 
     // Relatie met FavoriteTrail
     public List<FavoriteTrail> FavoriteTrails { get; set; } = new List<FavoriteTrail>();

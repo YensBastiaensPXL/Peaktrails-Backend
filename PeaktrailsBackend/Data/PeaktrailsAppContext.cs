@@ -13,6 +13,7 @@ namespace PeaktrailsBackend.Data
         public DbSet<Trail> Trails { get; set; }
         public DbSet<Photo> TrailPhotos { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         public DbSet<FavoriteTrail> FavoriteTrails { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -35,6 +36,20 @@ namespace PeaktrailsBackend.Data
                 .HasOne(ft => ft.User)
                 .WithMany(u => u.FavoriteTrails) // Eén User kan veel FavoriteTrails hebben
                 .HasForeignKey(ft => ft.UserId)
+                .IsRequired();
+
+            // Relatie tussen Review en User (many-to-one)
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.User)  // Review heeft een User
+                .WithMany(u => u.Reviews) // Eén User kan veel Reviews hebben
+                .HasForeignKey(r => r.UserId)
+                .IsRequired();
+
+            // Relatie tussen Review en Trail (many-to-one)
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Trail)  // Review heeft een Trail
+                .WithMany(t => t.Reviews) // Eén Trail kan veel Reviews hebben
+                .HasForeignKey(r => r.TrailId)
                 .IsRequired();
         }
 

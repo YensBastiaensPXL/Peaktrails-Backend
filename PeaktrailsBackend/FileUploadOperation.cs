@@ -9,7 +9,7 @@ public class FileUploadOperation : IOperationFilter
 
         if (requestBody != null && context.MethodInfo.GetParameters().Any(p => p.ParameterType == typeof(IFormFile)))
         {
-            // Zorg ervoor dat zowel de bestand en andere velden in de request body worden opgenomen
+            // Zorg ervoor dat zowel het bestand als andere velden in de request body worden opgenomen
             requestBody.Content["multipart/form-data"] = new OpenApiMediaType
             {
                 Schema = new OpenApiSchema
@@ -17,14 +17,15 @@ public class FileUploadOperation : IOperationFilter
                     Type = "object",
                     Properties = new Dictionary<string, OpenApiSchema>
                     {
-                        { "gpxFile", new OpenApiSchema { Type = "string", Format = "binary" } },  // Verander "file" naar "gpxFile"
+                        { "gpxFile", new OpenApiSchema { Type = "string", Format = "binary" } },  // GPX bestand
                         { "name", new OpenApiSchema { Type = "string" } },
                         { "distance", new OpenApiSchema { Type = "string" } },
                         { "ascent", new OpenApiSchema { Type = "string" } },
                         { "descent", new OpenApiSchema { Type = "string" } },
                         { "difficulty", new OpenApiSchema { Type = "string" } },
                         { "description", new OpenApiSchema { Type = "string" } },
-                        { "location", new OpenApiSchema { Type = "string" } }
+                        { "location", new OpenApiSchema { Type = "string" } },
+                        { "photoFiles", new OpenApiSchema { Type = "array", Items = new OpenApiSchema { Type = "string", Format = "binary" } } }  // Voeg een array van foto-bestanden toe
                     }
                 }
             };

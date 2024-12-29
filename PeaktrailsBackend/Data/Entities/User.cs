@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using PeaktrailsBackend.Data.Entities;
+using System.Text.Json.Serialization;
 
 namespace PeaktrailsApp.Data.Entities
 {
@@ -12,7 +13,8 @@ namespace PeaktrailsApp.Data.Entities
         //JsonIgnore wordt gebruikt zodat je deze niet mee stuurt in de json response
         [JsonIgnore]
         public ICollection<FavoriteTrail> FavoriteTrails { get; set; }
-
+        [JsonIgnore]
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
 
         [JsonIgnore]
         public DateTime CreatedDate { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PeaktrailsBackend.Data;
+using PeaktrailsBackend.Data.Entities;
 
 namespace PeaktrailsBackend.Controllers
 {
@@ -51,26 +52,26 @@ namespace PeaktrailsBackend.Controllers
     [FromForm] string descent,
     [FromForm] string difficulty,
     [FromForm] string description,
-    [FromForm] string location)
+    [FromForm] string location,
+    [FromForm] IFormFile[] photoFiles) // Gebruik een array van foto-bestanden
         {
             if (gpxFile == null || gpxFile.Length == 0)
                 return BadRequest("GPX file is required.");
 
-            // Save the GPX file to a temporary location
+            // Opslaan van het GPX-bestand
             var filePath = Path.Combine(Path.GetTempPath(), gpxFile.FileName);
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
                 await gpxFile.CopyToAsync(stream);
             }
 
-            // Read the GPX content from the saved file
             string gpxContent;
             using (var reader = new StreamReader(filePath))
             {
                 gpxContent = await reader.ReadToEndAsync();
             }
 
-            // Parse and validate distance, ascent, and descent
+            // Parse en valideer afstand, stijging en daling
             if (!decimal.TryParse(distance, out var parsedDistance))
                 return BadRequest("Invalid distance provided.");
             if (!decimal.TryParse(ascent, out var parsedAscent))
@@ -78,7 +79,7 @@ namespace PeaktrailsBackend.Controllers
             if (!decimal.TryParse(descent, out var parsedDescent))
                 return BadRequest("Invalid descent provided.");
 
-            // Create a new Trail entity and save it to the database
+            // Maak een nieuwe Trail-entiteit en sla deze op in de database
             var route = new Trail
             {
                 Name = name,
@@ -94,11 +95,35 @@ namespace PeaktrailsBackend.Controllers
                 GPXContent = gpxContent
             };
 
-            // Save the new trail in the database
+            // Foto's opslaan en koppelen aan de trail
+            if (photoFiles != null && photoFiles.Length > 0)
+            {
+                foreach (var photoFile in photoFiles)
+                {
+                    var photoPath = Path.Combine(Path.GetTempPath(), photoFile.FileName);
+                    using (var stream = new FileStream(photoPath, FileMode.Create))
+                    {
+                        await photoFile.CopyToAsync(stream);
+                    }
+
+                    var photo = new Photo
+                    {
+                        PhotoData = await System.IO.File.ReadAllBytesAsync(photoPath),
+                        PhotoDescription = route.Name,
+                        CreatedDate = DateTime.Now,
+                        TrailId = route.TrailId // Verbindt de foto met de trail
+                    };
+
+                    route.Photos.Add(photo); // Voeg de foto toe aan de trail
+                }
+            }
+
+            // Sla de trail op in de database
             await _trailsRepository.AddTrailAsync(route);
 
             return Ok(new { message = "Route saved successfully", route.TrailId });
         }
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTrail(
@@ -186,6 +211,56 @@ namespace PeaktrailsBackend.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Error deleting trail: {ex.Message}");
+            }
+        }
+
+        // Haal alle reviews voor een specifieke trail op
+        [HttpGet("{trailId}/reviews")]
+        public async Task<IActionResult> GetReviewsByTrail(int trailId)
+        {
+            try
+            {
+                var reviews = await _trailsRepository.GetReviewsByTrailIdAsync(trailId);
+                if (reviews == null || !reviews.Any())
+                {
+                    return NotFound("Geen reviews gevonden voor deze trail.");
+                }
+
+                return Ok(reviews);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error fetching reviews: {ex.Message}");
+            }
+        }
+
+        // Voeg een review toe voor een specifieke trail
+        [HttpPost("{trailId}/reviews")]
+        public async Task<IActionResult> AddReview(int trailId, [FromBody] ReviewDto reviewDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var review = new Review
+                {
+                    TrailId = trailId,
+                    UserId = reviewDto.UserId, // Je kan de userId hier uit de frontend halen, bijvoorbeeld uit de sessie
+                    Rating = reviewDto.Rating,
+                    Comment = reviewDto.Comment,
+                    CreatedDate = DateTime.Now
+                };
+
+                await _trailsRepository.AddReviewAsync(review);
+
+                return Ok(new { message = "Review added successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error adding review: {ex.Message}");
             }
         }
 
