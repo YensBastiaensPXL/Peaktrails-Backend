@@ -138,9 +138,11 @@ namespace PeaktrailsApp.Controllers
                 var favoriteTrails = await _repository.GetFavoriteTrailsByUserIdAsync(userId);
 
                 // Controleer of er geen favoriete trails zijn
-                if (!favoriteTrails.Any())
-                    return NotFound("Geen favoriete trails gevonden voor deze gebruiker.");
-
+                if (favoriteTrails == null || !favoriteTrails.Any())
+                {
+                    // Geen favoriete trails gevonden, retourneer een lege lijst
+                    return Ok(new List<Trail>());
+                }
                 // Verwerk de foto’s en zet de foto’s om naar Base64 voor verzending
                 var trailWithPhotos = favoriteTrails.Select(trail => new
                 {
