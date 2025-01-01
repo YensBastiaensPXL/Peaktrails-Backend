@@ -346,3 +346,4 @@ C:\Users\11802975\OneDrive - PXL\PRO2\React oefenen\Peaktrails project\peaktrail
 C:\Users\11802975\OneDrive - PXL\PRO2\React oefenen\Peaktrails project\peaktrails-backend\PeaktrailsBackend\bin\Debug\net8.0\PeaktrailsBackend.pdb
 C:\Users\11802975\OneDrive - PXL\PRO2\React oefenen\Peaktrails project\peaktrails-backend\PeaktrailsBackend\obj\Debug\net8.0\PeaktrailsBackend.genruntimeconfig.cache
 C:\Users\11802975\OneDrive - PXL\PRO2\React oefenen\Peaktrails project\peaktrails-backend\PeaktrailsBackend\obj\Debug\net8.0\ref\PeaktrailsBackend.dll
+C:\Users\11802975\OneDrive - PXL\PRO2\React oefenen\Peaktrails project\peaktrails-backend\PeaktrailsBackend\bin\Debug\net8.0\SixLabors.ImageSharp.dll

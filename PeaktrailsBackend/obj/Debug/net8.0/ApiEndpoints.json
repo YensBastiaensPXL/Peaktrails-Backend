@@ -384,6 +384,27 @@
   },
   {
     "ContainingType": "PeaktrailsApp.Controllers.UsersController",
+    "Method": "RemoveFavoriteTrail",
+    "RelativePath": "api/Users/{userId}/removefavorites/{trailId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "trailId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PeaktrailsApp.Controllers.UsersController",
     "Method": "Login",
     "RelativePath": "api/Users/login",
     "HttpMethod": "POST",

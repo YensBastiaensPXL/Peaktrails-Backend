@@ -177,23 +177,53 @@ namespace PeaktrailsApp.Controllers
         }
 
 
-
-
-        // Favoriet toevoegen gebruiker
         [HttpPost("{userId}/addfavorites/{trailId}")]
         public async Task<IActionResult> AddFavoriteTrail(int userId, int trailId)
         {
             try
             {
-                // Add the favorite trail to the database using the repository
-                await _repository.AddFavoriteTrailAsync(userId, trailId);
+                // Voeg de favoriete trail toe en controleer of het al een favoriet is
+                var result = await _repository.AddFavoriteTrailAsync(userId, trailId);
 
-                return Ok(); // Return success
+                if (result)
+                {
+                    return Ok("Favorite trail added successfully.");
+                }
+                else
+                {
+                    return Conflict("This trail is already in your favorites.");
+                }
             }
             catch (Exception ex)
             {
-                // Return an error if something goes wrong
                 return StatusCode(500, $"Error adding favorite: {ex.Message}");
+            }
+        }
+
+
+
+        // Verwijder een favoriete trail van een gebruiker
+        [HttpDelete("{userId}/removefavorites/{trailId}")]
+        public async Task<IActionResult> RemoveFavoriteTrail(int userId, int trailId)
+        {
+            try
+            {
+                // Verwijder de favoriete trail uit de database
+                var result = await _repository.RemoveFavoriteTrailAsync(userId, trailId);
+
+                if (result)
+                {
+                    return Ok("Favorite trail removed successfully.");
+                }
+                else
+                {
+                    return NotFound("Favorite trail not found.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Foutafhandeling
+                return StatusCode(500, $"Error removing favorite: {ex.Message}");
             }
         }
     }

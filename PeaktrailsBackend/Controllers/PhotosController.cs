@@ -2,6 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using PeaktrailsBackend.Data;
 using PeaktrailsBackend.Data.Entities;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
 
 namespace PeaktrailsBackend.Controllers
 {
@@ -28,15 +31,30 @@ namespace PeaktrailsBackend.Controllers
                 return NotFound("No photos found for the specified trail.");
             }
 
-            // Return the photos as a list of objects with their binary data
-            var photoResults = photos.Select(photo => new
+            var photoResults = new List<object>();
+            foreach (var photo in photos)
             {
-                photo.PhotoId,
-                photo.PhotoDescription,
-                photo.CreatedDate,
-                // Here you might want to return the base64 string for binary data
-                PhotoData = Convert.ToBase64String(photo.PhotoData)  // Convert binary to Base64 
-            });
+                using (var image = Image.Load(photo.PhotoData))
+                {
+                    image.Mutate(x => x.Resize(800, 450).AutoOrient()); // Resize the image to 800x450px
+                    var encoder = new JpegEncoder
+                    {
+                        Quality = 75 // Adjust quality
+                    };
+                    using (var ms = new MemoryStream())
+                    {
+                        image.SaveAsJpeg(ms, encoder);
+                        var base64String = Convert.ToBase64String(ms.ToArray());
+                        photoResults.Add(new
+                        {
+                            photo.PhotoId,
+                            photo.PhotoDescription,
+                            photo.CreatedDate,
+                            PhotoData = base64String
+                        });
+                    }
+                }
+            }
 
             return Ok(photoResults);
         }

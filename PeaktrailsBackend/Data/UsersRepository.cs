@@ -55,9 +55,19 @@ namespace PeaktrailsApp.Data
                 .ToListAsync();
         }
 
-        // Voeg een trail toe aan de favorieten van een gebruiker
-        public async Task AddFavoriteTrailAsync(int userId, int trailId)
+        public async Task<bool> AddFavoriteTrailAsync(int userId, int trailId)
         {
+            // Controleer of de trail al een favoriet is van deze gebruiker
+            var existingFavorite = await _context.FavoriteTrails
+                .FirstOrDefaultAsync(ft => ft.UserId == userId && ft.TrailId == trailId);
+
+            if (existingFavorite != null)
+            {
+                // Als het al een favoriet is, return false of doe verder niets
+                return false;
+            }
+
+            // Voeg de nieuwe favoriete trail toe
             var favoriteTrail = new FavoriteTrail
             {
                 UserId = userId,
@@ -65,6 +75,29 @@ namespace PeaktrailsApp.Data
             };
             _context.FavoriteTrails.Add(favoriteTrail);
             await _context.SaveChangesAsync();
+
+            return true; // Return true als het succesvol is toegevoegd
         }
+
+
+        public async Task<bool> RemoveFavoriteTrailAsync(int userId, int trailId)
+        {
+            // Zoek naar de favoriete trail
+            var favoriteTrail = await _context.FavoriteTrails
+                .FirstOrDefaultAsync(ft => ft.UserId == userId && ft.TrailId == trailId);
+
+            if (favoriteTrail == null)
+            {
+                return false; // Als de trail geen favoriet is van de gebruiker
+            }
+
+            // Verwijder de favoriete trail
+            _context.FavoriteTrails.Remove(favoriteTrail);
+            await _context.SaveChangesAsync();
+
+            return true; // Return true als het succesvol is verwijderd
+        }
+
+
     }
 }
