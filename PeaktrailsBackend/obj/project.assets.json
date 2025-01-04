@@ -9459,9 +9459,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\11802975\\OneDrive - PXL\\PRO2\\React oefenen\\Peaktrails project\\peaktrails-backend\\PeaktrailsBackend\\PeaktrailsBackend.csproj",
+      "projectUniqueName": "C:\\Users\\11802975\\OneDrive - PXL\\PRO2\\React oefenen\\Peaktrails project\\Peaktrails-backend\\PeaktrailsBackend\\PeaktrailsBackend.csproj",
       "projectName": "PeaktrailsBackend",
-      "projectPath": "C:\\Users\\11802975\\OneDrive - PXL\\PRO2\\React oefenen\\Peaktrails project\\peaktrails-backend\\PeaktrailsBackend\\PeaktrailsBackend.csproj",
+      "projectPath": "C:\\Users\\11802975\\OneDrive - PXL\\PRO2\\React oefenen\\Peaktrails project\\Peaktrails-backend\\PeaktrailsBackend\\PeaktrailsBackend.csproj",
       "packagesPath": "C:\\Users\\11802975\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\11802975\\OneDrive - PXL\\PRO2\\React oefenen\\Peaktrails project\\peaktrails-backend\\PeaktrailsBackend\\obj\\",
       "projectStyle": "PackageReference",

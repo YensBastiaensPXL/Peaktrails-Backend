@@ -135,29 +135,29 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "gpxFile": {
+                  "GPXContent": {
                     "type": "string",
                     "format": "binary"
                   },
-                  "name": {
+                  "Name": {
                     "type": "string"
                   },
-                  "distance": {
+                  "Length": {
                     "type": "string"
                   },
-                  "ascent": {
+                  "TotalAscent": {
                     "type": "string"
                   },
-                  "descent": {
+                  "TotalDescent": {
                     "type": "string"
                   },
-                  "difficulty": {
+                  "Difficulty": {
                     "type": "string"
                   },
-                  "description": {
+                  "Description": {
                     "type": "string"
                   },
-                  "location": {
+                  "Location": {
                     "type": "string"
                   },
                   "photoFiles": {
@@ -211,29 +211,29 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "gpxFile": {
+                  "GPXContent": {
                     "type": "string",
                     "format": "binary"
                   },
-                  "name": {
+                  "Name": {
                     "type": "string"
                   },
-                  "distance": {
+                  "Length": {
                     "type": "string"
                   },
-                  "ascent": {
+                  "TotalAscent": {
                     "type": "string"
                   },
-                  "descent": {
+                  "TotalDescent": {
                     "type": "string"
                   },
-                  "difficulty": {
+                  "Difficulty": {
                     "type": "string"
                   },
-                  "description": {
+                  "Description": {
                     "type": "string"
                   },
-                  "location": {
+                  "Location": {
                     "type": "string"
                   },
                   "photoFiles": {

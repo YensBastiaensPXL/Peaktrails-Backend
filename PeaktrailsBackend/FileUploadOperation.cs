@@ -17,14 +17,15 @@ public class FileUploadOperation : IOperationFilter
                     Type = "object",
                     Properties = new Dictionary<string, OpenApiSchema>
                     {
-                        { "gpxFile", new OpenApiSchema { Type = "string", Format = "binary" } },  // GPX bestand
-                        { "name", new OpenApiSchema { Type = "string" } },
-                        { "distance", new OpenApiSchema { Type = "string" } },
-                        { "ascent", new OpenApiSchema { Type = "string" } },
-                        { "descent", new OpenApiSchema { Type = "string" } },
-                        { "difficulty", new OpenApiSchema { Type = "string" } },
-                        { "description", new OpenApiSchema { Type = "string" } },
-                        { "location", new OpenApiSchema { Type = "string" } },
+
+                        { "Name", new OpenApiSchema { Type = "string" } },
+                        { "Length", new OpenApiSchema { Type = "string" } },
+                        { "TotalAscent", new OpenApiSchema { Type = "string" } },
+                        { "TotalDescent", new OpenApiSchema { Type = "string" } },
+                        { "Difficulty", new OpenApiSchema { Type = "string" } },
+                        { "Description", new OpenApiSchema { Type = "string" } },
+                        { "Location", new OpenApiSchema { Type = "string" } },
+                        { "GPXContent", new OpenApiSchema { Type = "string", Format = "binary" } },
                         { "photoFiles", new OpenApiSchema { Type = "array", Items = new OpenApiSchema { Type = "string", Format = "binary" } } }  // Voeg een array van foto-bestanden toe
                     }
                 }

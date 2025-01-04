@@ -36,10 +36,10 @@ namespace PeaktrailsBackend.Controllers
             {
                 using (var image = Image.Load(photo.PhotoData))
                 {
-                    image.Mutate(x => x.Resize(800, 450).AutoOrient()); // Resize the image to 800x450px
+                    image.Mutate(x => x.Resize(400, 225).AutoOrient());
                     var encoder = new JpegEncoder
                     {
-                        Quality = 75 // Adjust quality
+                        Quality = 75
                     };
                     using (var ms = new MemoryStream())
                     {
