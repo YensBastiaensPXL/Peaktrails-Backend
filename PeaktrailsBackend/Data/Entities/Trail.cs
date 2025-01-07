@@ -5,6 +5,7 @@ using System.Text.Json.Serialization;
 public class Trail
 {
     public int TrailId { get; set; }
+    public int UserId { get; set; }
     public string Name { get; set; }
     public decimal Length { get; set; }
     public DateTime CreatedDate { get; set; }
@@ -17,10 +18,10 @@ public class Trail
     public string GPXLocation { get; set; }
     public string GPXContent { get; set; }
 
-    // Navigatie-eigenschap naar de foto's (one-to-many relatie)
+
 
     public List<Photo> Photos { get; set; } = new List<Photo>();
-    [JsonIgnore] // Voorkom dat Reviews worden meegegeven in de JSON
+    [JsonIgnore]
     public List<Review> Reviews { get; set; } = new List<Review>();
 
     // Relatie met FavoriteTrail

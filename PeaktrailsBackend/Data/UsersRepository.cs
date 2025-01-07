@@ -44,6 +44,30 @@ namespace PeaktrailsApp.Data
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<Trail>> GetTrailsByUserIdAsync(int userId)
+        {
+            return await _context.Trails
+                .Where(t => t.UserId == userId)
+                .Include(t => t.Photos)  // Voorbeeld: trails ophalen inclusief hun foto's
+                .ToListAsync();
+        }
+
+        public async Task<bool> DeleteUserTrailAsync(int userId, int trailId)
+        {
+            var trail = await _context.Trails
+                .FirstOrDefaultAsync(t => t.UserId == userId && t.TrailId == trailId);
+
+            if (trail == null)
+            {
+                return false; // Trail niet gevonden of niet gekoppeld aan de gebruiker
+            }
+
+            _context.Trails.Remove(trail);
+            await _context.SaveChangesAsync();
+            return true; // Trail succesvol verwijderd
+        }
+
+
 
         public async Task<IEnumerable<Trail>> GetFavoriteTrailsByUserIdAsync(int userId)
         {

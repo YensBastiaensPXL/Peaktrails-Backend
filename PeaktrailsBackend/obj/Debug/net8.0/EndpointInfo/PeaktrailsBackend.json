@@ -135,20 +135,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "GPXContent": {
-                    "type": "string",
-                    "format": "binary"
-                  },
                   "Name": {
                     "type": "string"
                   },
-                  "Length": {
+                  "userId": {
+                    "type": "int"
+                  },
+                  "distance": {
                     "type": "string"
                   },
-                  "TotalAscent": {
+                  "ascent": {
                     "type": "string"
                   },
-                  "TotalDescent": {
+                  "descent": {
                     "type": "string"
                   },
                   "Difficulty": {
@@ -159,6 +158,10 @@
                   },
                   "Location": {
                     "type": "string"
+                  },
+                  "gpxFile": {
+                    "type": "string",
+                    "format": "binary"
                   },
                   "photoFiles": {
                     "type": "array",
@@ -211,20 +214,19 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "GPXContent": {
-                    "type": "string",
-                    "format": "binary"
-                  },
                   "Name": {
                     "type": "string"
                   },
-                  "Length": {
+                  "userId": {
+                    "type": "int"
+                  },
+                  "distance": {
                     "type": "string"
                   },
-                  "TotalAscent": {
+                  "ascent": {
                     "type": "string"
                   },
-                  "TotalDescent": {
+                  "descent": {
                     "type": "string"
                   },
                   "Difficulty": {
@@ -235,6 +237,10 @@
                   },
                   "Location": {
                     "type": "string"
+                  },
+                  "gpxFile": {
+                    "type": "string",
+                    "format": "binary"
                   },
                   "photoFiles": {
                     "type": "array",
@@ -446,6 +452,61 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Users/{userId}/trails": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Users/{userId}/trails/{trailId}": {
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "trailId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success"

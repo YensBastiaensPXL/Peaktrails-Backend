@@ -128,6 +128,40 @@ namespace PeaktrailsApp.Controllers
 
             return Ok(new { UserId = existingUser.UserId, UserName = existingUser.UserName });
         }
+
+
+        [HttpGet("{userId}/trails")]
+        public async Task<IActionResult> GetTrailsByUserId(int userId)
+        {
+            var userTrails = await _repository.GetTrailsByUserIdAsync(userId);
+            if (userTrails == null || userTrails.Count == 0)
+            {
+                return NotFound("Geen trails gevonden voor deze gebruiker.");
+            }
+            return Ok(userTrails);
+        }
+
+        [HttpDelete("{userId}/trails/{trailId}")]
+        public async Task<IActionResult> DeleteUserTrail(int userId, int trailId)
+        {
+            try
+            {
+                var result = await _repository.DeleteUserTrailAsync(userId, trailId);
+                if (!result)
+                {
+                    return NotFound("Trail not found or not associated with the user.");
+                }
+                return Ok("Trail deleted successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error deleting trail: {ex.Message}");
+            }
+        }
+
+
+
+
         // Favorieten ophalen user
         [HttpGet("{userId}/favorites")]
         public async Task<IActionResult> GetFavoriteTrails(int userId)

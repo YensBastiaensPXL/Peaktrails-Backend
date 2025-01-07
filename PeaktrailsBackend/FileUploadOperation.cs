@@ -19,13 +19,14 @@ public class FileUploadOperation : IOperationFilter
                     {
 
                         { "Name", new OpenApiSchema { Type = "string" } },
-                        { "Length", new OpenApiSchema { Type = "string" } },
-                        { "TotalAscent", new OpenApiSchema { Type = "string" } },
-                        { "TotalDescent", new OpenApiSchema { Type = "string" } },
+                        { "userId", new OpenApiSchema { Type = "int" } },
+                        { "distance", new OpenApiSchema { Type = "string" } },
+                        { "ascent", new OpenApiSchema { Type = "string" } },
+                        { "descent", new OpenApiSchema { Type = "string" } },
                         { "Difficulty", new OpenApiSchema { Type = "string" } },
                         { "Description", new OpenApiSchema { Type = "string" } },
                         { "Location", new OpenApiSchema { Type = "string" } },
-                        { "GPXContent", new OpenApiSchema { Type = "string", Format = "binary" } },
+                        { "gpxFile", new OpenApiSchema { Type = "string", Format = "binary" } },
                         { "photoFiles", new OpenApiSchema { Type = "array", Items = new OpenApiSchema { Type = "string", Format = "binary" } } }  // Voeg een array van foto-bestanden toe
                     }
                 }

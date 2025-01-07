@@ -17,6 +17,13 @@ namespace PeaktrailsBackend.Data
         public DbSet<FavoriteTrail> FavoriteTrails { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<Trail>()
+                .HasOne<User>() // Stel dat een Trail één User heeft
+                .WithMany() // En een User kan veel Trails hebben
+                .HasForeignKey(p => p.UserId) // Foreign Key op UserId
+                .OnDelete(DeleteBehavior.Cascade); // Of een andere DeleteBehavior afhankelijk van je vereisten
+
             // Relatie tussen Trail en Photo (one-to-many)
             modelBuilder.Entity<Photo>()
                 .HasOne<Trail>()

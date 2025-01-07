@@ -46,6 +46,7 @@ namespace PeaktrailsBackend.Controllers
         [HttpPost("upload-trail")]
         public async Task<IActionResult> UploadGpxFile(
     [FromForm] IFormFile gpxFile,
+    [FromForm] int userid,
     [FromForm] string name,
     [FromForm] string distance,
     [FromForm] string ascent,
@@ -83,6 +84,7 @@ namespace PeaktrailsBackend.Controllers
             var route = new Trail
             {
                 Name = name,
+                UserId = userid,
                 Length = parsedDistance,
                 Elevation = parsedAscent,
                 TotalAscent = parsedAscent,
@@ -128,6 +130,7 @@ namespace PeaktrailsBackend.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTrail(
     int id,
+    [FromForm] int userid,
     [FromForm] IFormFile gpxFile,  // Nieuw bestand toevoegen
     [FromForm] string name,
     [FromForm] string distance,
@@ -154,6 +157,7 @@ namespace PeaktrailsBackend.Controllers
 
             // Update trail properties
             trail.Name = name;
+            trail.UserId = userid;
             trail.Length = parsedDistance;
             trail.Elevation = parsedAscent;
             trail.TotalAscent = parsedAscent;
