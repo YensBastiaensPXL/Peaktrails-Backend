@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PeaktrailsBackend.Data;
 using PeaktrailsBackend.Data.Entities;
+using System.Text;
 
 namespace PeaktrailsBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TrailsController : ControllerBase // Wijziging hier
+    public class TrailsController : ControllerBase
     {
-        private readonly TrailsRepository _trailsRepository; // Wijziging hier
+        private readonly TrailsRepository _trailsRepository;
 
         public TrailsController(PeaktrailsAppContext context)
         {
@@ -20,7 +21,6 @@ namespace PeaktrailsBackend.Controllers
         {
             var trails = await _trailsRepository.GetAllTrailsAsync();
 
-            // Controleer of trails null is of een lege lijst
             if (trails == null || !trails.Any())
             {
                 return NotFound("No trails found.");
@@ -45,16 +45,16 @@ namespace PeaktrailsBackend.Controllers
 
         [HttpPost("upload-trail")]
         public async Task<IActionResult> UploadGpxFile(
-    [FromForm] IFormFile gpxFile,
-    [FromForm] int userid,
-    [FromForm] string name,
-    [FromForm] string distance,
-    [FromForm] string ascent,
-    [FromForm] string descent,
-    [FromForm] string difficulty,
-    [FromForm] string description,
-    [FromForm] string location,
-    [FromForm] IFormFile[] photoFiles) // Gebruik een array van foto-bestanden
+        [FromForm] IFormFile gpxFile,
+        [FromForm] int userid,
+        [FromForm] string name,
+        [FromForm] string distance,
+        [FromForm] string ascent,
+        [FromForm] string descent,
+        [FromForm] string difficulty,
+        [FromForm] string description,
+        [FromForm] string location,
+        [FromForm] IFormFile[] photoFiles)
         {
             if (gpxFile == null || gpxFile.Length == 0)
                 return BadRequest("GPX file is required.");
@@ -194,6 +194,29 @@ namespace PeaktrailsBackend.Controllers
             return Ok(new { message = "Trail updated successfully", trail.TrailId });
         }
 
+        [HttpGet("{trailId}/download-gpx")]
+        public async Task<IActionResult> DownloadGpxFile(int trailId)
+        {
+            var trail = await _trailsRepository.GetTrailByIdAsync(trailId);
+            if (trail == null)
+            {
+                return NotFound("Trail not found.");
+            }
+
+            if (string.IsNullOrEmpty(trail.GPXContent))
+            {
+                return NotFound("No GPX data available for this trail.");
+            }
+
+            // Convert de GPX-content (die als string is opgeslagen) naar een byte array
+            var gpxData = Encoding.UTF8.GetBytes(trail.GPXContent);
+
+            // Stel een geschikte bestandsnaam in, inclusief de .gpx extensie
+            var fileName = $"{trail.Name.Replace(" ", "_")}.gpx";
+
+            // Return een bestand met de GPX data
+            return File(gpxData, "application/gpx+xml", fileName);
+        }
 
 
         [HttpDelete("{id}")]

@@ -135,7 +135,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "Name": {
+                  "name": {
                     "type": "string"
                   },
                   "userId": {
@@ -150,13 +150,13 @@
                   "descent": {
                     "type": "string"
                   },
-                  "Difficulty": {
+                  "difficulty": {
                     "type": "string"
                   },
-                  "Description": {
+                  "description": {
                     "type": "string"
                   },
-                  "Location": {
+                  "location": {
                     "type": "string"
                   },
                   "gpxFile": {
@@ -214,7 +214,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "Name": {
+                  "name": {
                     "type": "string"
                   },
                   "userId": {
@@ -229,13 +229,13 @@
                   "descent": {
                     "type": "string"
                   },
-                  "Difficulty": {
+                  "difficulty": {
                     "type": "string"
                   },
-                  "Description": {
+                  "description": {
                     "type": "string"
                   },
-                  "Location": {
+                  "location": {
                     "type": "string"
                   },
                   "gpxFile": {
@@ -254,6 +254,29 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Trails/{trailId}/download-gpx": {
+      "get": {
+        "tags": [
+          "Trails"
+        ],
+        "parameters": [
+          {
+            "name": "trailId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success"

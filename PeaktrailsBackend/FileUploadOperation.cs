@@ -18,14 +18,14 @@ public class FileUploadOperation : IOperationFilter
                     Properties = new Dictionary<string, OpenApiSchema>
                     {
 
-                        { "Name", new OpenApiSchema { Type = "string" } },
+                        { "name", new OpenApiSchema { Type = "string" } },
                         { "userId", new OpenApiSchema { Type = "int" } },
                         { "distance", new OpenApiSchema { Type = "string" } },
                         { "ascent", new OpenApiSchema { Type = "string" } },
                         { "descent", new OpenApiSchema { Type = "string" } },
-                        { "Difficulty", new OpenApiSchema { Type = "string" } },
-                        { "Description", new OpenApiSchema { Type = "string" } },
-                        { "Location", new OpenApiSchema { Type = "string" } },
+                        { "difficulty", new OpenApiSchema { Type = "string" } },
+                        { "description", new OpenApiSchema { Type = "string" } },
+                        { "location", new OpenApiSchema { Type = "string" } },
                         { "gpxFile", new OpenApiSchema { Type = "string", Format = "binary" } },
                         { "photoFiles", new OpenApiSchema { Type = "array", Items = new OpenApiSchema { Type = "string", Format = "binary" } } }  // Voeg een array van foto-bestanden toe
                     }

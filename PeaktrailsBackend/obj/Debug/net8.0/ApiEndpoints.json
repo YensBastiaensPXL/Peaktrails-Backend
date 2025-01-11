@@ -171,6 +171,22 @@
   },
   {
     "ContainingType": "PeaktrailsBackend.Controllers.TrailsController",
+    "Method": "DownloadGpxFile",
+    "RelativePath": "api/Trails/{trailId}/download-gpx",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "trailId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PeaktrailsBackend.Controllers.TrailsController",
     "Method": "GetReviewsByTrail",
     "RelativePath": "api/Trails/{trailId}/reviews",
     "HttpMethod": "GET",
