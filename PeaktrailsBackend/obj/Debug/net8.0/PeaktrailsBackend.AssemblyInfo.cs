@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PeaktrailsBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8a75826ba6ee8f09b3886d3987142884b4f1246d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3184b9702ae21d8f575201a4cd0004ad5184d8e6")]
 [assembly: System.Reflection.AssemblyProductAttribute("PeaktrailsBackend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PeaktrailsBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

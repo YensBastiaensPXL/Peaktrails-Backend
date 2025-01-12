@@ -9,8 +9,6 @@ namespace PeaktrailsApp.Data.Entities
         public string UserName { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }
-
-        //JsonIgnore wordt gebruikt zodat je deze niet mee stuurt in de json response
         [JsonIgnore]
         public ICollection<FavoriteTrail> FavoriteTrails { get; set; }
         [JsonIgnore]
@@ -19,7 +17,6 @@ namespace PeaktrailsApp.Data.Entities
         [JsonIgnore]
         public DateTime CreatedDate { get; set; }
 
-        // Een extra eigenschap die de datum formatteert naar 'dd-MM-yyyy'
         public string FormattedCreatedDate
         {
             get

@@ -653,6 +653,10 @@
             "type": "integer",
             "format": "int32"
           },
+          "userName": {
+            "type": "string",
+            "nullable": true
+          },
           "rating": {
             "type": "integer",
             "format": "int32"

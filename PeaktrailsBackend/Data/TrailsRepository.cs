@@ -83,40 +83,47 @@ namespace PeaktrailsBackend.Data
         public async Task DeleteTrailAsync(int id)
         {
             var trail = await _context.Trails
-                                      .Include(t => t.Photos)  // Includeer foto's
-                                      .Include(t => t.FavoriteTrails)  // Includeer favoriete trails
+                                      .Include(t => t.Photos)
+                                      .Include(t => t.FavoriteTrails)
                                       .FirstOrDefaultAsync(t => t.TrailId == id);
 
             if (trail != null)
             {
-                // Verwijder alle foto's die aan de trail zijn gekoppeld
                 if (trail.Photos != null)
                 {
-                    _context.TrailPhotos.RemoveRange(trail.Photos);  // Verwijder alle foto's van de trail
+                    _context.TrailPhotos.RemoveRange(trail.Photos);
                 }
 
-                // Verwijder de favoriete trails die aan deze trail zijn gekoppeld
                 if (trail.FavoriteTrails != null)
                 {
-                    _context.FavoriteTrails.RemoveRange(trail.FavoriteTrails);  // Verwijder de favoriete trails
+                    _context.FavoriteTrails.RemoveRange(trail.FavoriteTrails);
                 }
 
-                // Verwijder de trail zelf
                 _context.Trails.Remove(trail);
 
                 await _context.SaveChangesAsync();
             }
         }
-        // Haal alle reviews voor een specifieke trail op
-        public async Task<IEnumerable<Review>> GetReviewsByTrailIdAsync(int trailId)
+        public async Task<List<ReviewDto>> GetReviewsByTrailIdAsync(int trailId)
         {
             return await _context.Reviews
                 .Where(r => r.TrailId == trailId)
-                .Include(r => r.User) // Includeer de gebruiker die de review heeft gepost
+                .Join(
+                    _context.Users,
+                    review => review.UserId,
+                    user => user.UserId,
+                    (review, user) => new ReviewDto
+                    {
+                        UserId = review.UserId,
+                        UserName = user.UserName,
+                        Rating = review.Rating,
+                        Comment = review.Comment
+                    }
+                )
                 .ToListAsync();
         }
 
-        // Voeg een review toe
+
         public async Task AddReviewAsync(Review review)
         {
             await _context.Reviews.AddAsync(review);

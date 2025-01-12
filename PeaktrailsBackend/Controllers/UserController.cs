@@ -15,12 +15,9 @@ namespace PeaktrailsApp.Controllers
 
         public UsersController(UsersRepository repository)
         {
-            _repository = repository; // Injectie van de repository
+            _repository = repository;
         }
 
-
-
-        // Haalt alle gebruikers op
         [HttpGet]
         public async Task<IActionResult> GetUsers()
         {
@@ -28,7 +25,6 @@ namespace PeaktrailsApp.Controllers
             return Ok(users);
         }
 
-        // Haalt een specifieke gebruiker op via ID
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser(int id)
         {
@@ -41,13 +37,11 @@ namespace PeaktrailsApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddUser([FromBody] UserDto userDto)
         {
-            // Controleer of het model geldig is
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); // Retourneer validatiefouten
+                return BadRequest(ModelState);
             }
 
-            // Controleer of de gebruiker al bestaat (bijvoorbeeld via e-mail)
             var existingUser = await _repository.GetUsersAsync();
             if (existingUser.Any(u => u.Email == userDto.Email))
             {
@@ -59,6 +53,7 @@ namespace PeaktrailsApp.Controllers
             {
                 UserName = userDto.UserName,
                 Email = userDto.Email,
+                CreatedDate = DateTime.Now,
                 PasswordHash = PasswordHasher.HashPassword(userDto.PasswordHash)
             };
 
