@@ -9,10 +9,12 @@ namespace PeaktrailsBackend.Data.Entities
 
         public int TrailId { get; set; }
 
-        public byte[] PhotoData { get; set; }  // Store binary data
+        public byte[] PhotoData { get; set; }
 
         public string PhotoDescription { get; set; }
 
         public DateTime CreatedDate { get; set; }
+
+
     }
 }

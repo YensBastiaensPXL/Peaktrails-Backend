@@ -10,11 +10,14 @@ namespace PeaktrailsBackend.Controllers
     public class TrailsController : ControllerBase
     {
         private readonly TrailsRepository _trailsRepository;
+        private readonly PhotosRepository _photosRepository;
 
-        public TrailsController(PeaktrailsAppContext context)
+        public TrailsController(TrailsRepository trailsRepository, PhotosRepository photosRepository)
         {
-            _trailsRepository = new TrailsRepository(context);
+            _trailsRepository = trailsRepository ?? throw new ArgumentNullException(nameof(trailsRepository));
+            _photosRepository = photosRepository ?? throw new ArgumentNullException(nameof(photosRepository));
         }
+
 
         [HttpGet]
         public async Task<IActionResult> GetTrails()
@@ -127,100 +130,111 @@ namespace PeaktrailsBackend.Controllers
         }
 
 
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTrail(
-      int id,
-      [FromForm] IFormFile gpxFile,
-      [FromForm] int userid,
-      [FromForm] string name,
-      [FromForm] string distance,
-      [FromForm] string ascent,
-      [FromForm] string descent,
-      [FromForm] string difficulty,
-      [FromForm] string description,
-      [FromForm] string location,
-      [FromForm] IFormFile[] photoFiles)
+     int id,
+     [FromForm] IFormFile gpxFile,
+     [FromForm] int userid,
+     [FromForm] string name,
+     [FromForm] string distance,
+     [FromForm] string ascent,
+     [FromForm] string descent,
+     [FromForm] string difficulty,
+     [FromForm] string description,
+     [FromForm] string location,
+     [FromForm] IFormFile[] photoFiles)
         {
-            // Haal de bestaande trail op
-            var trail = await _trailsRepository.GetTrailByIdAsync(id);
-
-            if (trail == null)
-            {
-                return NotFound($"Trail with id {id} not found.");
-            }
-
-            // Parse en valideer afstand, stijging en daling
-            if (!decimal.TryParse(distance, out var parsedDistance))
-                return BadRequest("Invalid distance provided.");
-            if (!decimal.TryParse(ascent, out var parsedAscent))
-                return BadRequest("Invalid ascent provided.");
-            if (!decimal.TryParse(descent, out var parsedDescent))
-                return BadRequest("Invalid descent provided.");
-
-            // Werk de bestaande trail bij
-            trail.UserId = userid;
-            trail.Name = name;
-            trail.Length = parsedDistance;
-            trail.TotalAscent = parsedAscent;
-            trail.TotalDescent = parsedDescent;
-            trail.Difficulty = difficulty;
-            trail.Description = description;
-            trail.Location = location;
-
-            // GPX-bestand verwerken als een nieuw bestand wordt geüpload
-            if (gpxFile != null && gpxFile.Length > 0)
-            {
-                var filePath = Path.Combine(Path.GetTempPath(), gpxFile.FileName);
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await gpxFile.CopyToAsync(stream);
-                }
-
-                using (var reader = new StreamReader(filePath))
-                {
-                    trail.GPXContent = await reader.ReadToEndAsync();
-                }
-
-                trail.GPXLocation = filePath;
-            }
-
-            // Foto's verwerken
-            if (photoFiles != null && photoFiles.Length > 0)
-            {
-                // Oude foto's verwijderen
-                trail.Photos.Clear();
-
-                foreach (var photoFile in photoFiles)
-                {
-                    var photoPath = Path.Combine(Path.GetTempPath(), photoFile.FileName);
-                    using (var stream = new FileStream(photoPath, FileMode.Create))
-                    {
-                        await photoFile.CopyToAsync(stream);
-                    }
-
-                    var photo = new Photo
-                    {
-                        PhotoData = await System.IO.File.ReadAllBytesAsync(photoPath),
-                        PhotoDescription = trail.Name,
-                        CreatedDate = DateTime.Now,
-                        TrailId = trail.TrailId
-                    };
-
-                    trail.Photos.Add(photo);
-                }
-            }
-
             try
             {
-                // Update de trail in de database
-                await _trailsRepository.UpdateTrailAsync(trail);
-                return Ok(new { message = "Trail updated successfully", trail.TrailId });
+                // Haal de bestaande trail op
+                var existingTrail = await _trailsRepository.GetTrailByIdAsync(id);
+
+                if (existingTrail == null)
+                {
+                    return NotFound($"Trail with id {id} not found.");
+                }
+
+                // Parse en valideer afstand, stijging en daling
+                if (!decimal.TryParse(distance, out var parsedDistance))
+                    return BadRequest("Invalid distance provided.");
+                if (!decimal.TryParse(ascent, out var parsedAscent))
+                    return BadRequest("Invalid ascent provided.");
+                if (!decimal.TryParse(descent, out var parsedDescent))
+                    return BadRequest("Invalid descent provided.");
+
+                // Werk de trailgegevens bij
+                existingTrail.UserId = userid;
+                existingTrail.Name = name;
+                existingTrail.Length = parsedDistance;
+                existingTrail.TotalAscent = parsedAscent;
+                existingTrail.TotalDescent = parsedDescent;
+                existingTrail.Difficulty = difficulty;
+                existingTrail.Description = description;
+                existingTrail.Location = location;
+
+                // GPX-bestand verwerken als een nieuw bestand wordt geüpload
+                if (gpxFile != null && gpxFile.Length > 0)
+                {
+                    var filePath = Path.Combine(Path.GetTempPath(), gpxFile.FileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await gpxFile.CopyToAsync(stream);
+                    }
+
+                    using (var reader = new StreamReader(filePath))
+                    {
+                        existingTrail.GPXContent = await reader.ReadToEndAsync();
+                    }
+
+                    existingTrail.GPXLocation = filePath;
+                }
+
+                // Verwijder oude foto's en upload nieuwe
+                if (photoFiles != null && photoFiles.Length > 0)
+                {
+                    // Verwijder bestaande foto's
+                    await _photosRepository.DeletePhotosByTrailId(existingTrail.TrailId);
+
+                    // Voeg nieuwe foto's toe
+                    foreach (var file in photoFiles)
+                    {
+                        byte[] fileData;
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await file.CopyToAsync(memoryStream);
+                            fileData = memoryStream.ToArray();
+                        }
+
+                        var newPhoto = new Photo
+                        {
+                            TrailId = existingTrail.TrailId,
+                            PhotoData = fileData,
+                            PhotoDescription = name,
+                            CreatedDate = DateTime.Now
+                        };
+
+                        await _photosRepository.AddPhoto(newPhoto);
+                    }
+                }
+
+                // Update trail in de database
+                await _trailsRepository.UpdateTrailAsync(existingTrail);
+                return Ok(new { message = "Trail updated successfully", trailId = existingTrail.TrailId });
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"An error occurred while updating the trail: {ex.Message}");
             }
         }
+
+
+
+
+
+
+
+
 
 
         [HttpGet("{trailId}/download-gpx")]

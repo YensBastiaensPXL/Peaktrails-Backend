@@ -18,18 +18,9 @@ namespace PeaktrailsBackend.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<Trail>()
-    .Property(t => t.Length)
-    .HasColumnType("decimal(25, 2)");
-
-            modelBuilder.Entity<Trail>()
-                .Property(t => t.TotalAscent)
-                .HasColumnType("decimal(25, 2)");
-
-            modelBuilder.Entity<Trail>()
-                .Property(t => t.TotalDescent)
-                .HasColumnType("decimal(25, 2)");
-
+            modelBuilder.Entity<Photo>()
+            .Property(p => p.PhotoId)
+            .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Trail>()
                 .HasOne<User>() // Stel dat een Trail één User heeft

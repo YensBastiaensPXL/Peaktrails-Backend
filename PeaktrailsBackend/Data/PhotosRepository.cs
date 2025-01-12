@@ -35,5 +35,21 @@ namespace PeaktrailsBackend.Data
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task DeletePhotosByTrailId(int trailId)
+        {
+            var photos = await _context.TrailPhotos.Where(p => p.TrailId == trailId).ToListAsync();
+
+            if (photos == null || !photos.Any())
+            {
+                Console.WriteLine($"No photos found for trailId {trailId}");
+                return;
+            }
+
+            _context.TrailPhotos.RemoveRange(photos);
+            await _context.SaveChangesAsync();
+        }
+
+
     }
 }

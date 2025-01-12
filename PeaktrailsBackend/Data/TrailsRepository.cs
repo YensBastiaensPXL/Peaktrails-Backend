@@ -28,11 +28,56 @@ namespace PeaktrailsBackend.Data
             await _context.SaveChangesAsync();
         }
 
+        public async Task RemovePhotosByTrailIdAsync(int trailId)
+        {
+            var photos = await _context.TrailPhotos
+                .Where(p => p.TrailId == trailId)
+                .ToListAsync();
+
+            if (photos.Any())
+            {
+                _context.TrailPhotos.RemoveRange(photos);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+
         public async Task UpdateTrailAsync(Trail trail)
         {
-            _context.Entry(trail).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            // Haal de bestaande trail op
+            var existingTrail = await _context.Trails
+                .Include(t => t.Photos)
+                .FirstOrDefaultAsync(t => t.TrailId == trail.TrailId);
+
+            if (existingTrail != null)
+            {
+
+
+                // Update trail properties
+                existingTrail.Name = trail.Name;
+                existingTrail.Length = trail.Length;
+                existingTrail.TotalAscent = trail.TotalAscent;
+                existingTrail.TotalDescent = trail.TotalDescent;
+                existingTrail.Difficulty = trail.Difficulty;
+                existingTrail.Description = trail.Description;
+                existingTrail.Location = trail.Location;
+                existingTrail.GPXContent = trail.GPXContent;
+                existingTrail.GPXLocation = trail.GPXLocation;
+
+                // Voeg de nieuwe foto's toe
+                existingTrail.Photos = new List<Photo>(trail.Photos);
+
+                // Save changes
+                await _context.SaveChangesAsync();
+            }
         }
+
+
+
+
+
+
+
 
 
         public async Task DeleteTrailAsync(int id)
