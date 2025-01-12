@@ -81,11 +81,6 @@
         "IsRequired": true
       },
       {
-        "Name": "userid",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
         "Name": "ContentType",
         "Type": "System.String",
         "IsRequired": false
@@ -113,6 +108,11 @@
       {
         "Name": "FileName",
         "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "userid",
+        "Type": "System.Int32",
         "IsRequired": false
       },
       {
@@ -148,6 +148,11 @@
       {
         "Name": "location",
         "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "photoFiles",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
         "IsRequired": false
       }
     ],

@@ -28,11 +28,12 @@ namespace PeaktrailsBackend.Data
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateTrailAsync(Trail trail) // Wijziging hier
+        public async Task UpdateTrailAsync(Trail trail)
         {
             _context.Entry(trail).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
 
         public async Task DeleteTrailAsync(int id)
         {

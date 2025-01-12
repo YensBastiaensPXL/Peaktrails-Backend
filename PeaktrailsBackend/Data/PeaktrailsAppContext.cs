@@ -19,6 +19,19 @@ namespace PeaktrailsBackend.Data
         {
 
             modelBuilder.Entity<Trail>()
+    .Property(t => t.Length)
+    .HasColumnType("decimal(25, 2)");
+
+            modelBuilder.Entity<Trail>()
+                .Property(t => t.TotalAscent)
+                .HasColumnType("decimal(25, 2)");
+
+            modelBuilder.Entity<Trail>()
+                .Property(t => t.TotalDescent)
+                .HasColumnType("decimal(25, 2)");
+
+
+            modelBuilder.Entity<Trail>()
                 .HasOne<User>() // Stel dat een Trail één User heeft
                 .WithMany() // En een User kan veel Trails hebben
                 .HasForeignKey(p => p.UserId) // Foreign Key op UserId
